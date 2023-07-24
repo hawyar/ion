@@ -1,3 +1,5 @@
+#import "Eval.h"
+#import "Global.h"
 #import "Reader.h"
 #import "Repl.h"
 #import <Foundation/Foundation.h>
@@ -8,6 +10,33 @@ void PrintUsage() {
   NSLog(@"%@", usage);
 }
 
+@implementation Eval {
+  JSContext *_context;
+}
+
+- (instancetype)initWithContext:(JSContext *)context {
+  self = [super init];
+
+  if (self) {
+    _context = context;
+  }
+
+  return self;
+}
+
+- (JSValue *)eval:(NSString *)expr {
+  JSValue *result = [_context evaluateScript:expr];
+
+  if ([_context.exception isObject]) {
+    NSLog(@"JavaScript Error: %@", _context.exception);
+  } else {
+    NSLog(@"Result: %@", [result toObject]);
+  }
+
+  return result;
+}
+@end
+
 int main(int argc, const char *argv[]) {
   @autoreleasepool {
     if (argc < 2) {
@@ -17,33 +46,34 @@ int main(int argc, const char *argv[]) {
       return 0;
     }
 
-    NSString *expr = [NSString stringWithUTF8String:argv[1]];
+    NSString *input = [NSString stringWithUTF8String:argv[1]];
 
-    if ([expr isEqualToString:@""]) {
+    if ([input isEqualToString:@""]) {
       PrintUsage();
       return 1;
     }
 
+    NSLog(@"content: %@", input);
+
     Reader *reader = [[Reader alloc] init];
 
-    if ([expr hasPrefix:@"/"] || [expr hasPrefix:@"./"] ||
-        [expr hasPrefix:@"../"] || [expr hasPrefix:@"~"]) {
-      expr = [reader readFromFile:expr];
+    if ([input hasPrefix:@"/"] || [input hasPrefix:@"./"] ||
+        [input hasPrefix:@"../"] || [input hasPrefix:@"~"]) {
+      input = [reader readFromFile:input];
     } else {
-      expr = [reader readFromExpression:expr];
+      input = [reader readFromExpression:input];
     }
 
-    NSLog(@"content: %@", expr);
+    JSContext *context = [[JSContext alloc] init];
 
-    // JSContext *context = [[JSContext alloc] init];
+    // Global *global = [[Global alloc] init];
 
-    // JSValue *result = [context evaluateScript:expr];
+    context[@"fhir"] = ^NSString *(NSString *resource) { return resource; };
 
-    // if ([context.exception isObject]) {
-    //   NSLog(@"JavaScript Error: %@", context.exception);
-    // } else {
-    //   NSLog(@"Result: %@", [result toObject]);
-    // }
+    Eval *evaluator = [[Eval alloc] initWithContext:context];
+
+    [evaluator eval:input];
+    return 0;
   }
   return 0;
 }
