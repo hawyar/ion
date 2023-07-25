@@ -53,7 +53,7 @@ int main(int argc, const char *argv[]) {
       return 1;
     }
 
-    NSLog(@"content: %@", input);
+    NSLog(@"input: %@", input);
 
     Reader *reader = [[Reader alloc] init];
 
@@ -66,9 +66,12 @@ int main(int argc, const char *argv[]) {
 
     JSContext *context = [[JSContext alloc] init];
 
-    // Global *global = [[Global alloc] init];
+    Global *global = [[Global alloc] init];
 
-    context[@"fhir"] = ^NSString *(NSString *resource) { return resource; };
+    context[@"fhir"] = global;
+
+    // context[@"fhir"] = ^NSString *(NSString *resource) { return resource;
+    // };
 
     Eval *evaluator = [[Eval alloc] initWithContext:context];
 
