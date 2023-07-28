@@ -1,8 +1,11 @@
+#import "Eval.h"
 #import <Foundation/Foundation.h>
 
 @interface Repl : NSObject
+@property(nonatomic, strong) Eval *eval;
 
-- (void)run;
+- (instancetype)initWithEval:(Eval *)eval;
 - (NSString *)getInput;
+- (void)run;
 
 @end

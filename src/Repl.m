@@ -5,30 +5,38 @@
 
 @implementation Repl
 
+- (instancetype)initWithEval:(Eval *)eval {
+  self = [super init];
+
+  if (self) {
+    self.eval = eval;
+  }
+
+  return self;
+}
+
 - (void)run {
   NSLog(@"starting repl...");
 
   JSContext *context = [[JSContext alloc] init];
-  Eval *evaluator = [[Eval alloc] initWithContext:context];
+
+  Global *global = [[Global alloc] init];
+
+  context[@"fhir"] = global;
+
+  Eval *evaluator = [[Eval alloc] initWithGlobalContext:global context:context];
 
   while (1) {
     printf(">> ");
     NSString *input = [self getInput];
 
-    if ([input isEqualToString:@"exit"]) {
+    if ([input isEqualToString:@".exit"] || [input isEqualToString:@".quit"]) {
       break;
     }
 
     NSLog(@"You entered: %@", input);
 
     [evaluator eval:input];
-
-    // JSValue *result = [context evaluateScript:input];
-    // if ([context.exception isObject]) {
-    // NSLog(@"JavaScript Error: %@", context.exception);
-    // } else {
-    // NSLog(@"Result: %@", [result toObject]);
-    // }
   }
 }
 
