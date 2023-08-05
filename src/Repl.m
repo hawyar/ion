@@ -18,13 +18,7 @@
 - (void)run {
   NSLog(@"starting repl...");
 
-  JSContext *context = [[JSContext alloc] init];
-
-  Global *global = [[Global alloc] init];
-
-  context[@"fhir"] = global;
-
-  Eval *evaluator = [[Eval alloc] initWithGlobalContext:global context:context];
+  Eval *evaluator = [[Eval alloc] init];
 
   while (1) {
     printf(">> ");
@@ -34,7 +28,7 @@
       break;
     }
 
-    NSLog(@"You entered: %@", input);
+    NSLog(@"input: %@", input);
 
     [evaluator eval:input];
   }

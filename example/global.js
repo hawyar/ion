@@ -1,3 +1,3 @@
 (function () {
-  return fhir.version;
+  return ion.version;
 })();

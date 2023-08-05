@@ -6,8 +6,10 @@
 @property(nonatomic, strong) JSContext *context;
 @property(nonatomic, strong) Global *global;
 
-- (instancetype)initWithGlobalContext:(Global *)global
-                              context:(JSContext *)context;
+- (instancetype)init;
+- (instancetype)initWithGlobalAndContext:(Global *)global
+                                 context:(JSContext *)context;
+- (void)setContextGlobal;
 - (JSValue *)eval:(NSString *)expr;
 
 @end

@@ -13,7 +13,7 @@ void PrintUsage(NSString *name, NSString *version) {
       @"\n"
       @"\tIf no options are provided, the program will open the REPL."
       @"\n"
-      @"\tExample: %@ -e \"fhir.patient(\"jane doe\")\n";
+      @"\tExample: %@ -e \"ion.version\"\n";
 
   NSString *doubleSpace = @"  ";
 
@@ -24,7 +24,7 @@ void PrintUsage(NSString *name, NSString *version) {
 
 int main(int argc, const char *argv[]) {
   NSString *version = @"0.0.1";
-  NSString *name = @"fhirx";
+  NSString *name = @"ion";
 
   @autoreleasepool {
     if (argc < 2) {
@@ -59,14 +59,7 @@ int main(int argc, const char *argv[]) {
           break;
         }
 
-        JSContext *context = [[JSContext alloc] init];
-
-        Global *global = [[Global alloc] init];
-
-        context.globalObject[global.globalKey] = global;
-
-        Eval *evaluator = [[Eval alloc] initWithGlobalContext:global
-                                                      context:context];
+        Eval *evaluator = [[Eval alloc] init];
 
         [evaluator eval:input];
         break;
@@ -89,14 +82,7 @@ int main(int argc, const char *argv[]) {
 
         NSString *input = [reader readFromFile:path];
 
-        JSContext *context = [[JSContext alloc] init];
-
-        Global *global = [[Global alloc] init];
-
-        context[global.globalKey] = global;
-
-        Eval *evaluator = [[Eval alloc] initWithGlobalContext:global
-                                                      context:context];
+        Eval *evaluator = [[Eval alloc] init];
 
         [evaluator eval:input];
 

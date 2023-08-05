@@ -5,21 +5,28 @@
 
 @implementation Eval
 
-- (instancetype)initWithGlobalContext:(Global *)global
-                              context:(JSContext *)context {
+- (instancetype)init {
   self = [super init];
   if (self) {
-    _global = global;
-    _context = context;
+    self.global = [[Global alloc] init];
+    self.context = [[JSContext alloc] init];
+    [self setContextGlobal];
+  }
+  return self;
+}
+
+- (instancetype)initWithGlobalAndContext:(Global *)global
+                                 context:(JSContext *)context {
+  self = [super init];
+  if (self) {
+    self.global = global;
+    self.context = context;
+    [self setContextGlobal];
   }
   return self;
 }
 
 - (JSValue *)eval:(NSString *)expr {
-
-  NSLog(@"input: %@", expr);
-
-  _context[@"fhir"] = _global;
   JSValue *result = [_context evaluateScript:expr];
 
   if ([_context.exception isObject]) {
@@ -30,4 +37,14 @@
 
   return result;
 }
+
+- (void)setContextGlobal {
+  self.context[self.global.key] = self.global;
+  // self.context[@"patient"] =
+}
+
+// - (JSValue *)evalWithContext:(JSContext *)context expr:(NSString *)expr {
+// NSLog(@"input: %@", expr);
+// context[self.global.key] = self.global;
+// }
 @end

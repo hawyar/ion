@@ -1,6 +1,6 @@
 .PHONY: all build run clean
 
-BIN = fhirx
+BIN = ion
 SRC_DIR = src
 SRC_FILES = $(wildcard $(SRC_DIR)/*.m)
 HEADER_FILES = $(wildcard $(SRC_DIR)/*.h)
