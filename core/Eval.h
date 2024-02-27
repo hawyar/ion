@@ -9,7 +9,7 @@
 - (instancetype)init;
 - (instancetype)initWithGlobalAndContext:(Global *)global
                                  context:(JSContext *)context;
-- (void)setContextGlobal;
+- (void)setGlobal;
 - (JSValue *)eval:(NSString *)expr;
 
 @end

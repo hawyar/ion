@@ -28,7 +28,7 @@ int main(int argc, const char *argv[]) {
 
   @autoreleasepool {
     if (argc < 2) {
-      Repl *repl = [[Repl alloc] init];
+      REPL *repl = [[REPL alloc] init];
 
       [repl run];
       return 0;
@@ -65,6 +65,11 @@ int main(int argc, const char *argv[]) {
         break;
       }
 
+      // if ([arg isEqualToString:@"--demo"]) {
+      // dispatch_queue_t queue = dispatch_queue_create("ion_queue",
+      // DISPATCH_QUEUE_CONCURRENT); define the block which will get the number
+      // and print it dispatch_async(queue, printBlock);
+      // }
       if ([arg isEqualToString:@"-f"] || [arg isEqualToString:@"--file"]) {
         if (argc < 3) {
           PrintUsage(name, version);
