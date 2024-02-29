@@ -1,5 +1,3 @@
-.PHONY: all build run clean
-
 BIN = ion
 SRC_DIR = core
 BUILD_DIR = build

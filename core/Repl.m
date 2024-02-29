@@ -33,37 +33,33 @@
   while (1) {
     DLog(@"%@", _prefixChar);
 
-    NSString *input = [self currentBuffer];
+    NSString *line = [self readLine];
 
-    if ([input isEqualToString:@".exit"]) {
+    if ([line isEqualToString:@".exit"]) {
       break;
     }
 
-    if ([input isEqualToString:@".help"]) {
+    if ([line isEqualToString:@".help"]) {
       DLog(@"%@\n", _helpText);
       continue;
     }
 
-    DLog(@"input: %@\n", input);
-
-    [evaluator eval:input];
+    // DLog(@"input: %@\n", line);
+    // JSValue *result = [evaluator eval:line];
+    [evaluator eval:line];
   }
 }
 
-- (NSString *)currentBuffer {
-  NSMutableString *input = [[NSMutableString alloc] init];
+- (NSString *)readLine {
+  char buffer[bufferSize];
+  fgets(buffer, bufferSize, stdin);
 
-  while (1) {
-    char c = getchar();
+  NSString *input = [NSString stringWithUTF8String:buffer];
 
-    if (c == '\n') {
-      break;
-    }
-
-    [input appendFormat:@"%c", c];
-  }
+  NSAssert([input length] <= bufferSize,
+           @"input is larger than buffer size of %d\n", bufferSize);
 
   return [input
-      stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+      stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 }
 @end

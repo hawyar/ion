@@ -1,3 +1,5 @@
+#import "Eval.h"
+#import "Macro.h"
 #import "Reader.h"
 #import "Repl.h"
 #import <Foundation/Foundation.h>
@@ -5,21 +7,13 @@
 
 void PrintUsage(NSString *name, NSString *version) {
   NSString *usage =
-      @"\nUsage: %@ v%@ [options] [file or expression]\n"
-      @"\t-h, --help: Print this help text\n"
-      @"\t-v, --version: Print the version of the program\n"
-      @"\t-e, --eval <expression>: Evaluate the expression\n"
-      @"\t-f, --file <file>: Evaluate the file\n"
-      @"\n"
-      @"\tIf no options are provided, the program will open the REPL."
-      @"\n"
-      @"\tExample: %@ -e \"ion.version\"\n";
-
-  NSString *doubleSpace = @"  ";
-
-  NSString *usageWithDoubleSpaces =
-      [usage stringByReplacingOccurrencesOfString:@"\t" withString:doubleSpace];
-  NSLog(usageWithDoubleSpaces, name, version, name);
+      @"Usage: %@ v%@ [options] [file or expression]\n"
+      @"-h, --help: Print this help text\n"
+      @"-v, --version: Print the version of the program\n"
+      @"-e, --eval <expression>: Evaluate the expression\n"
+      @"-f, --file <file>: Evaluate the file\n"
+      @"If no options are provided, the program will open the REPL.\n";
+  DLog(usage, name, version, name);
 }
 
 int main(int argc, const char *argv[]) {
@@ -65,11 +59,6 @@ int main(int argc, const char *argv[]) {
         break;
       }
 
-      // if ([arg isEqualToString:@"--demo"]) {
-      // dispatch_queue_t queue = dispatch_queue_create("ion_queue",
-      // DISPATCH_QUEUE_CONCURRENT); define the block which will get the number
-      // and print it dispatch_async(queue, printBlock);
-      // }
       if ([arg isEqualToString:@"-f"] || [arg isEqualToString:@"--file"]) {
         if (argc < 3) {
           PrintUsage(name, version);
